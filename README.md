@@ -1,9 +1,12 @@
 # SudokuSolver
 A solver for many types of Sudoku. This project was made to be run in your IDE, so no compilied binaries will be provided.
+
 ## How To Use
 After importing the code to your IDE, edit the Sudoku grid in SudokuSolver.java to fit your problem. If your Sudoku has custom constraints, head over to SudokuConstraints.java to see which ones you would like.
 
-Then, go to setupConstraints() in SudokuSolver.java to set them.
+Then, go to ```setupConstraints()``` in SudokuSolver.java to set them.
+
+**Special Note:** If you have a SudokuXV and you have set sum5 and sum10, you should enable ```noSum5``` and ```noSum10```, as one of the rules in SudokuXV prohibits numbers next to each other from summing up to 5 or 10 if not marked. For consective sudokus, ```nonConsecutive``` should be enabled after ```consecutive``` is filled.
 
 ## Features
 * Solve regular Sudokus and variants of sudokus
