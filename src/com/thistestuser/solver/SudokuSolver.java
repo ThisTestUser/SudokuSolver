@@ -84,7 +84,7 @@ public class SudokuSolver
 			return false;
 		if(constraints.isSubsections() && !subsectionConstraint(board, row, column))
 			return false;
-		if(constraints.isDiagonal() && row == column && !diagnoalConstraint(board))
+		if(constraints.isDiagonal() && (row == column || 8 - row == column) && !diagonalConstraint(board, row == column))
 			return false;
 		if(constraints.isCenterDot() && row % 3 == 1 && column % 3 == 1
 			&& !centerDotConstraint(board))
@@ -402,13 +402,21 @@ public class SudokuSolver
 		return true;
 	}
 	
-	private boolean diagnoalConstraint(int[][] board)
+	private boolean diagonalConstraint(int[][] board, boolean leftToRight)
 	{
 		boolean[] constraint = new boolean[BOARD_SIZE];
 		
-		for(int d = 0; d < BOARD_SIZE; d++)
-			if(!checkConstraint(board, d, constraint, d))
-				return false;
+		if(leftToRight)
+		{
+			for(int d = 0; d < BOARD_SIZE; d++)
+				if(!checkConstraint(board, d, constraint, d))
+					return false;
+		}else
+		{
+			for(int d = 0; d < BOARD_SIZE; d++)
+				if(!checkConstraint(board, d, constraint, 8 - d))
+					return false;
+		}
 		return true;
 	}
 	
