@@ -30,18 +30,18 @@ public class SudokuConstraints
 
 	/**
 	 * Is the sudoku non-consecutive (numbers next to each other can't be
-	 * consecutive) unless marked as consecutive
+	 * consecutive) unless marked as consecutive in {@link #consecutive}
 	 */
 	private boolean nonConsecutive = false;
 
 	/**
-	 * Can numbers in a sudoku add up to 5 (if true, only cells marked in sum5
+	 * Can numbers next to each other in a sudoku add up to 5 (if true, only cells marked in {@link #sum5}
 	 * can add up to 5)
 	 */
 	private boolean nonSum5 = false;
 
 	/**
-	 * Can numbers in a sudoku add up to 10 (if true, only cells marked in sum5
+	 * Can numbers next to each other  in a sudoku add up to 10 (if true, only cells marked in {@link #sum10}
 	 * can add up to 10)
 	 */
 	private boolean nonSum10 = false;
