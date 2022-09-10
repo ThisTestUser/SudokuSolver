@@ -92,6 +92,24 @@ public class SudokuConstraints
 	 * Pairs of two cells that sum to 10.
 	 */
 	private List<Entry<Cell, Cell>> sum10 = new ArrayList<>();
+	
+	private final int boardSize;
+	private final int subsecWidth;
+	private final int subsecHeight;
+	
+	public SudokuConstraints(int boardSize)
+	{
+		this(boardSize, boardSize, boardSize);
+	}
+	
+	public SudokuConstraints(int boardSize, int subsecWidth, int subsecHeight)
+	{
+		if(boardSize % subsecWidth != 0 || boardSize % subsecHeight != 0)
+			throw new IllegalArgumentException("The board must be exactly divisble into subsections");
+		this.boardSize = boardSize;
+		this.subsecWidth = subsecWidth;
+		this.subsecHeight = subsecHeight;
+	}
 
 	public boolean isSubsections()
 	{
@@ -120,6 +138,8 @@ public class SudokuConstraints
 	
 	public void setCenterDot(boolean centerDot)
 	{
+		if(subsecWidth % 2 == 0 || subsecHeight % 2 == 0)
+			centerDot = false;
 		this.centerDot = centerDot;
 	}
 	
@@ -241,5 +261,20 @@ public class SudokuConstraints
 	public void setSum10(List<Entry<Cell, Cell>> sum10)
 	{
 		this.sum10 = sum10;
+	}
+	
+	public int getBoardSize()
+	{
+		return boardSize;
+	}
+	
+	public int getSubsecWidth()
+	{
+		return subsecWidth;
+	}
+
+	public int getSubsecHeight()
+	{
+		return subsecHeight;
 	}
 }

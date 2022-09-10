@@ -10,9 +10,6 @@ import java.util.stream.IntStream;
  */
 public class SudokuSolver
 {
-	public static final int BOARD_SIZE = 9;
-	private static final int SUBSECTION_WIDTH = 3;
-	private static final int SUBSECTION_HEIGHT = 3;
 	private static final int NO_VALUE = 0;
 	private static int[][] board = {
 		{0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -25,7 +22,7 @@ public class SudokuSolver
 		{0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0}
 	};
-	private SudokuConstraints constraints = new SudokuConstraints();
+	private SudokuConstraints constraints;
 	
 	public static void main(String[] args)
 	{
@@ -42,15 +39,15 @@ public class SudokuSolver
 	 */
 	private void setupConstraints()
 	{
-		constraints = new SudokuConstraints();
+		constraints = new SudokuConstraints(9, 3, 3);
 		//Set your constraints here, if necessary
 	}
 	
 	private void printBoard()
 	{
-		for(int row = 0; row < BOARD_SIZE; row++)
+		for(int row = 0; row < constraints.getBoardSize(); row++)
 		{
-			for(int column = 0; column < BOARD_SIZE; column++)
+			for(int column = 0; column < constraints.getBoardSize(); column++)
 				System.out.print(board[row][column] + " ");
 			System.out.println();
 		}
@@ -58,11 +55,11 @@ public class SudokuSolver
 	
 	private boolean solve(int[][] board)
 	{
-		for(int row = 0; row < BOARD_SIZE; row++)
-			for(int column = 0; column < BOARD_SIZE; column++)
+		for(int row = 0; row < constraints.getBoardSize(); row++)
+			for(int column = 0; column < constraints.getBoardSize(); column++)
 				if(board[row][column] == NO_VALUE)
 				{
-					for(int k = 1; k <= BOARD_SIZE; k++)
+					for(int k = 1; k <= constraints.getBoardSize(); k++)
 					{
 						board[row][column] = k;
 						if(isValid(board, row, column) && solve(board))
@@ -80,10 +77,11 @@ public class SudokuSolver
 			return false;
 		if(constraints.isSubsections() && !subsectionConstraint(board, row, column))
 			return false;
-		if(constraints.isDiagonal() && (row == column || row + column == BOARD_SIZE - 1) && !diagonalConstraint(board, row == column))
+		if(constraints.isDiagonal() && (row == column || row + column == constraints.getBoardSize() - 1)
+			&& !diagonalConstraint(board, row == column))
 			return false;
-		if(constraints.isCenterDot() && row % SUBSECTION_WIDTH == (SUBSECTION_WIDTH / 2)
-			&& column % SUBSECTION_HEIGHT == (SUBSECTION_HEIGHT / 2) && !centerDotConstraint(board))
+		if(constraints.isCenterDot() && row % constraints.getSubsecWidth() == (constraints.getSubsecWidth() / 2)
+			&& column % constraints.getSubsecHeight() == (constraints.getSubsecHeight() / 2) && !centerDotConstraint(board))
 			return false;
 		if(constraints.isNonConsecutive() && !nonConsecutiveConstraint(board, row, column))
 			return false;
@@ -178,7 +176,7 @@ public class SudokuSolver
 					return true;
 				}
 			}
-			if(known < BOARD_SIZE)
+			if(known < constraints.getBoardSize())
 			{
 				board[otherRow][otherCol] = known + 1;
 				if(isValid(board, otherRow, otherCol))
@@ -210,7 +208,7 @@ public class SudokuSolver
 			if(curSum + unknowns * 1 > sum)
 				return false;
 		}
-		if(curSum + unknowns * 1 > BOARD_SIZE)
+		if(curSum + unknowns * 1 > constraints.getBoardSize())
 			return false;
 		return true;
 	}
@@ -221,7 +219,7 @@ public class SudokuSolver
 		int value2 = board[cell2.getRow()][cell2.getColumn()];
 		if(value1 == 1)
 			return false;
-		if(value2 == BOARD_SIZE)
+		if(value2 == constraints.getBoardSize())
 			return false;
 		if(value1 != NO_VALUE && value2 != NO_VALUE && value1 <= value2)
 			return false;
@@ -232,7 +230,7 @@ public class SudokuSolver
 	{
 		int curSum = 0;
 		int unknowns = 0;
-		boolean[] passed = new boolean[BOARD_SIZE];
+		boolean[] passed = new boolean[constraints.getBoardSize()];
 		for(Cell cell : cells)
 		{
 			//Convention: No duplicate numbers in cages
@@ -275,7 +273,7 @@ public class SudokuSolver
 	
 	private boolean regionConstraint(int[][] board, List<Cell> cells)
 	{
-		boolean[] passed = new boolean[BOARD_SIZE];
+		boolean[] passed = new boolean[constraints.getBoardSize()];
 		for(Cell cell : cells)
 			if(!duplicatesCheck(board, cell.getRow(), passed, cell.getColumn()))
 				return false;
@@ -285,7 +283,7 @@ public class SudokuSolver
 	private boolean nonSumConstraint(int[][] board, int row, int column, boolean sum5)
 	{
 		int value = board[row][column];
-		if(row < BOARD_SIZE - 1 && board[row + 1][column] != NO_VALUE && board[row + 1][column] + value == (sum5 ? 5 : 10))
+		if(row < constraints.getBoardSize() - 1 && board[row + 1][column] != NO_VALUE && board[row + 1][column] + value == (sum5 ? 5 : 10))
 		{
 			boolean canSum = false;
 			if((sum5 ? constraints.getSum5() : constraints.getSum10()) != null)
@@ -313,7 +311,7 @@ public class SudokuSolver
 			if(!canSum)
 				return false;
 		}
-		if(column < BOARD_SIZE - 1 && board[row][column + 1] != NO_VALUE && board[row][column + 1] + value == (sum5 ? 5 : 10))
+		if(column < constraints.getBoardSize() - 1 && board[row][column + 1] != NO_VALUE && board[row][column + 1] + value == (sum5 ? 5 : 10))
 		{
 			boolean canSum = false;
 			if((sum5 ? constraints.getSum5() : constraints.getSum10()) != null)
@@ -347,7 +345,7 @@ public class SudokuSolver
 	private boolean nonConsecutiveConstraint(int[][] board, int row, int column)
 	{
 		int value = board[row][column];
-		if(row < BOARD_SIZE - 1 && board[row + 1][column] != NO_VALUE && Math.abs(board[row + 1][column] - value) == 1)
+		if(row < constraints.getBoardSize() - 1 && board[row + 1][column] != NO_VALUE && Math.abs(board[row + 1][column] - value) == 1)
 		{
 			boolean canCons = false;
 			if(constraints.getConsecutive() != null)
@@ -375,7 +373,7 @@ public class SudokuSolver
 			if(!canCons)
 				return false;
 		}
-		if(column < BOARD_SIZE - 1 && board[row][column + 1] != NO_VALUE && Math.abs(board[row][column + 1] - value) == 1)
+		if(column < constraints.getBoardSize() - 1 && board[row][column + 1] != NO_VALUE && Math.abs(board[row][column + 1] - value) == 1)
 		{
 			boolean canCons = false;
 			if(constraints.getConsecutive() != null)
@@ -408,10 +406,10 @@ public class SudokuSolver
 	
 	private boolean centerDotConstraint(int[][] board)
 	{
-		boolean[] passed = new boolean[BOARD_SIZE];
+		boolean[] passed = new boolean[constraints.getBoardSize()];
 		
-		for(int r = SUBSECTION_WIDTH / 2; r < BOARD_SIZE; r += SUBSECTION_WIDTH)
-			for(int c = SUBSECTION_HEIGHT / 2; c < BOARD_SIZE; c += SUBSECTION_HEIGHT)
+		for(int r = constraints.getSubsecWidth() / 2; r < constraints.getBoardSize(); r += constraints.getSubsecWidth())
+			for(int c = constraints.getSubsecHeight() / 2; c < constraints.getBoardSize(); c += constraints.getSubsecHeight())
 				if(!duplicatesCheck(board, r, passed, c))
 					return false;
 		return true;
@@ -419,17 +417,17 @@ public class SudokuSolver
 	
 	private boolean diagonalConstraint(int[][] board, boolean leftToRight)
 	{
-		boolean[] passed = new boolean[BOARD_SIZE];
+		boolean[] passed = new boolean[constraints.getBoardSize()];
 		
 		if(leftToRight)
 		{
-			for(int d = 0; d < BOARD_SIZE; d++)
+			for(int d = 0; d < constraints.getBoardSize(); d++)
 				if(!duplicatesCheck(board, d, passed, d))
 					return false;
 		}else
 		{
-			for(int d = 0; d < BOARD_SIZE; d++)
-				if(!duplicatesCheck(board, d, passed, BOARD_SIZE - 1 - d))
+			for(int d = 0; d < constraints.getBoardSize(); d++)
+				if(!duplicatesCheck(board, d, passed, constraints.getBoardSize() - 1 - d))
 					return false;
 		}
 		return true;
@@ -437,12 +435,12 @@ public class SudokuSolver
 	
 	private boolean subsectionConstraint(int[][] board, int row, int column)
 	{
-		boolean[] passed = new boolean[BOARD_SIZE];
-		int subsectionRowStart = row / SUBSECTION_WIDTH * SUBSECTION_WIDTH;
-		int subsectionRowEnd = subsectionRowStart + SUBSECTION_WIDTH;
+		boolean[] passed = new boolean[constraints.getBoardSize()];
+		int subsectionRowStart = row / constraints.getSubsecWidth() * constraints.getSubsecWidth();
+		int subsectionRowEnd = subsectionRowStart + constraints.getSubsecWidth();
 		
-		int subsectionColumnStart = column / SUBSECTION_HEIGHT * SUBSECTION_HEIGHT;
-		int subsectionColumnEnd = subsectionColumnStart + SUBSECTION_HEIGHT;
+		int subsectionColumnStart = column / constraints.getSubsecHeight() * constraints.getSubsecHeight();
+		int subsectionColumnEnd = subsectionColumnStart + constraints.getSubsecHeight();
 		
 		for(int r = subsectionRowStart; r < subsectionRowEnd; r++)
 			for(int c = subsectionColumnStart; c < subsectionColumnEnd; c++)
@@ -453,15 +451,15 @@ public class SudokuSolver
 	
 	private boolean columnConstraint(int[][] board, int column)
 	{
-		boolean[] passed = new boolean[BOARD_SIZE];
-		return IntStream.range(0, BOARD_SIZE).allMatch(
+		boolean[] passed = new boolean[constraints.getBoardSize()];
+		return IntStream.range(0, constraints.getBoardSize()).allMatch(
 			row -> duplicatesCheck(board, row, passed, column));
 	}
 	
 	private boolean rowConstraint(int[][] board, int row)
 	{
-		boolean[] passed = new boolean[BOARD_SIZE];
-		return IntStream.range(0, BOARD_SIZE).allMatch(
+		boolean[] passed = new boolean[constraints.getBoardSize()];
+		return IntStream.range(0, constraints.getBoardSize()).allMatch(
 			column -> duplicatesCheck(board, row, passed, column));
 	}
 	
