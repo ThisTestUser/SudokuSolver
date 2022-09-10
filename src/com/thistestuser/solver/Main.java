@@ -15,6 +15,27 @@ public class Main
 		SudokuConstraints constraints;
 		
 		board = new int[][]{
+			{0, 0, 0, 0},
+			{2, 0, 0, 0},
+			{0, 0, 3, 0},
+			{0, 4, 0, 0},
+		};
+		constraints = new SudokuConstraints(4, 2, 2);
+		constraints.setDiagonal(true);
+		SUDOKU_PROBLEMS.put("4x4", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
+			{6, 4, 3, 0, 0, 0},
+			{0, 0, 4, 0, 0, 1},
+			{1, 0, 6, 0, 0, 0},
+			{0, 0, 1, 0, 4, 0},
+			{0, 0, 0, 0, 0, 3},
+			{0, 5, 0, 0, 0, 0},
+		};
+		constraints = new SudokuConstraints(6, 2, 3);
+		SUDOKU_PROBLEMS.put("6x6", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
 			{0, 0, 0, 0, 0, 0, 2, 3, 0},
 			{2, 0, 0, 0, 0, 7, 0, 0, 0},
 			{0, 0, 0, 0, 4, 0, 0, 7, 9},
@@ -55,13 +76,14 @@ public class Main
 			return;
 		}else if(args.length == 2 && args[0].equalsIgnoreCase("--problem"))
 		{
-			if(SUDOKU_PROBLEMS.containsKey(args[1]))
+			if(!SUDOKU_PROBLEMS.containsKey(args[1]))
 			{
 				System.out.println("Invalid problem specified");
 				return;
 			}
 			solveProblem(args[1], SUDOKU_PROBLEMS.get(args[1]));
 			System.out.println("Done");
+			return;
 		}
 		
 		System.out.println("Invalid argument. Below are the possible arguments:");

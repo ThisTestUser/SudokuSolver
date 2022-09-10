@@ -45,8 +45,8 @@ public class SudokuSolver
 		if(constraints.isDiagonal() && (row == column || row + column == constraints.getBoardSize() - 1)
 			&& !diagonalConstraint(board, row == column))
 			return false;
-		if(constraints.isCenterDot() && row % constraints.getSubsecWidth() == (constraints.getSubsecWidth() / 2)
-			&& column % constraints.getSubsecHeight() == (constraints.getSubsecHeight() / 2) && !centerDotConstraint(board))
+		if(constraints.isCenterDot() && row % constraints.getSubsecHeight() == (constraints.getSubsecHeight() / 2)
+			&& column % constraints.getSubsecWidth() == (constraints.getSubsecWidth() / 2) && !centerDotConstraint(board))
 			return false;
 		if(constraints.isNonConsecutive() && !nonConsecutiveConstraint(board, row, column))
 			return false;
@@ -373,8 +373,8 @@ public class SudokuSolver
 	{
 		boolean[] passed = new boolean[constraints.getBoardSize()];
 		
-		for(int r = constraints.getSubsecWidth() / 2; r < constraints.getBoardSize(); r += constraints.getSubsecWidth())
-			for(int c = constraints.getSubsecHeight() / 2; c < constraints.getBoardSize(); c += constraints.getSubsecHeight())
+		for(int r = constraints.getSubsecHeight() / 2; r < constraints.getBoardSize(); r += constraints.getSubsecHeight())
+			for(int c = constraints.getSubsecWidth() / 2; c < constraints.getBoardSize(); c += constraints.getSubsecWidth())
 				if(!duplicatesCheck(board, r, passed, c))
 					return false;
 		return true;
@@ -401,11 +401,11 @@ public class SudokuSolver
 	private boolean subsectionConstraint(int[][] board, int row, int column)
 	{
 		boolean[] passed = new boolean[constraints.getBoardSize()];
-		int subsectionRowStart = row / constraints.getSubsecWidth() * constraints.getSubsecWidth();
-		int subsectionRowEnd = subsectionRowStart + constraints.getSubsecWidth();
+		int subsectionRowStart = row / constraints.getSubsecHeight() * constraints.getSubsecHeight();
+		int subsectionRowEnd = subsectionRowStart + constraints.getSubsecHeight();
 		
-		int subsectionColumnStart = column / constraints.getSubsecHeight() * constraints.getSubsecHeight();
-		int subsectionColumnEnd = subsectionColumnStart + constraints.getSubsecHeight();
+		int subsectionColumnStart = column / constraints.getSubsecWidth() * constraints.getSubsecWidth();
+		int subsectionColumnEnd = subsectionColumnStart + constraints.getSubsecWidth();
 		
 		for(int r = subsectionRowStart; r < subsectionRowEnd; r++)
 			for(int c = subsectionColumnStart; c < subsectionColumnEnd; c++)
