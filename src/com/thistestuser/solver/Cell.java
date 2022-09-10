@@ -24,7 +24,7 @@ public class Cell
 	@Override
 	public int hashCode()
 	{
-		return row * 9 + column;
+		return row * SudokuSolver.BOARD_SIZE + column;
 	}
 	
 	@Override

@@ -13,83 +13,83 @@ import java.util.Map.Entry;
 public class SudokuConstraints
 {
 	/**
-	 * Should the grid be divided into 3x3 sections (default sudokus have this)
+	 * Should the grid be divided into subsections with unique numbers?
 	 */
 	private boolean subsections = true;
 
 	/**
-	 * Should diagonals of the sudoku have unique numbers
+	 * Should diagonals of the sudoku have unique numbers?
 	 */
 	private boolean diagonal = false;
 
 	/**
-	 * Should the center of each of the 3x3 section of the square have unique
-	 * numbers
+	 * Should the center of each of the section of the square have unique numbers?
+	 * The dimensions of the subsection must be odd for this to work.
 	 */
 	private boolean centerDot = false;
 
 	/**
 	 * Is the sudoku non-consecutive (numbers next to each other can't be
-	 * consecutive) unless marked as consecutive in {@link #consecutive}
+	 * consecutive) unless marked as consecutive in {@link #consecutive}?
 	 */
 	private boolean nonConsecutive = false;
 
 	/**
 	 * Can numbers next to each other in a sudoku add up to 5 (if true, only cells marked in {@link #sum5}
-	 * can add up to 5)
+	 * can add up to 5)?
 	 */
 	private boolean nonSum5 = false;
 
 	/**
-	 * Can numbers next to each other  in a sudoku add up to 10 (if true, only cells marked in {@link #sum10}
-	 * can add up to 10)
+	 * Can numbers next to each other in a sudoku add up to 10 (if true, only cells marked in {@link #sum10}
+	 * can add up to 10)?
 	 */
 	private boolean nonSum10 = false;
 
 	/**
-	 * Special regions of the sudoku that must have unique numbers
+	 * Specific regions of the sudoku that must have unique numbers.
 	 */
 	private List<List<Cell>> regions = new ArrayList<>();
 
 	/**
-	 * Specific regions of the sudoku that must sum up the integer provided and
-	 * have unique numbers
+	 * Specific regions of the sudoku that must sum up to the integer provided and
+	 * have unique numbers.
 	 */
 	private Map<List<Cell>, Integer> killerSums = new HashMap<>();
 
 	/**
-	 * Two cells where the first cell has a greater value than the second cell
+	 * Pairs of two cells where the first cell has a greater value than the second cell.
 	 */
 	private List<Entry<Cell, Cell>> greaterThans = new ArrayList<>();
 
 	/**
-	 * The sum of numbers in the region must equal the number in the cell.
-	 * Region can have repeating numbers
+	 * Specific regions of the sudoku that must sum up to a specific cell.
+	 * Regions can have repeating numbers.
 	 */
 	private Map<Cell, List<Cell>> arrows = new HashMap<>();
 
 	/**
-	 * The two cells must have consecutive numbers
+	 * Pairs of two cells that contain consecutive numbers.
 	 */
 	private List<Entry<Cell, Cell>> consecutive = new ArrayList<>();
 
 	/**
-	 * The cells must be even
+	 * These cells must be even.
 	 */
 	private List<Cell> evenCells = new ArrayList<>();
 
 	/**
-	 * The cells must be odd
+	 * These cells must be odd.
 	 */
 	private List<Cell> oddCells = new ArrayList<>();
 
 	/**
-	 * The cells must have a sum of 5
+	 * Pairs of two cells that sum to 5.
 	 */
 	private List<Entry<Cell, Cell>> sum5 = new ArrayList<>();
 
 	/**
-	 * The cells must have a sum of 10
+	 * Pairs of two cells that sum to 10.
 	 */
 	private List<Entry<Cell, Cell>> sum10 = new ArrayList<>();
 
