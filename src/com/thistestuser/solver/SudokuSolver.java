@@ -11,49 +11,14 @@ import java.util.stream.IntStream;
 public class SudokuSolver
 {
 	private static final int NO_VALUE = 0;
-	private static int[][] board = {
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0}
-	};
-	private SudokuConstraints constraints;
+	private final SudokuConstraints constraints;
 	
-	public static void main(String[] args)
+	public SudokuSolver(SudokuConstraints constraints)
 	{
-		SudokuSolver solver = new SudokuSolver();
-		solver.setupConstraints();
-		if(solver.solve(board))
-			solver.printBoard();
-		else
-			System.out.println("Impossible board");
+		this.constraints = constraints;
 	}
 	
-	/**
-	 * Setup specific constraints for this sudoku. A cell's row is horizontal, while its column is vertical.
-	 */
-	private void setupConstraints()
-	{
-		constraints = new SudokuConstraints(9, 3, 3);
-		//Set your constraints here, if necessary
-	}
-	
-	private void printBoard()
-	{
-		for(int row = 0; row < constraints.getBoardSize(); row++)
-		{
-			for(int column = 0; column < constraints.getBoardSize(); column++)
-				System.out.print(board[row][column] + " ");
-			System.out.println();
-		}
-	}
-	
-	private boolean solve(int[][] board)
+	public boolean solve(int[][] board)
 	{
 		for(int row = 0; row < constraints.getBoardSize(); row++)
 			for(int column = 0; column < constraints.getBoardSize(); column++)
