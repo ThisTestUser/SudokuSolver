@@ -1,7 +1,8 @@
 package com.thistestuser.solver;
 
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 /**
@@ -12,6 +13,11 @@ public class SudokuSolver
 {
 	private static final int NO_VALUE = 0;
 	private final SudokuConstraints constraints;
+	
+	private final Map<Cell, Integer> gtUpChainCache = new HashMap<>();
+	private final Map<Cell, Integer> gtDownChainCache = new HashMap<>();
+	private final Map<Cell, Integer> gtUpGroupCache = new HashMap<>();
+	private final Map<Cell, Integer> gtDownGroupCache = new HashMap<>();
 	
 	public SudokuSolver(SudokuConstraints constraints)
 	{
@@ -172,6 +178,10 @@ public class SudokuSolver
 			//All other zeroes gridded in as "1"
 			if(curSum + unknowns * 1 > sum)
 				return false;
+
+			//Sum is too low
+			if(unknowns == 0 && curSum < sum)
+				return false;
 		}
 		if(curSum + unknowns * 1 > constraints.getBoardSize())
 			return false;
@@ -188,7 +198,128 @@ public class SudokuSolver
 			return false;
 		if(value1 != NO_VALUE && value2 != NO_VALUE && value1 <= value2)
 			return false;
+		
+		if(value1 != NO_VALUE)
+		{
+			//Find longest downward chain starting from cell2
+			Set<Cell> passed = new HashSet<>();
+			int chain = gtDownChainCache.getOrDefault(cell2, 0);
+			if(chain == 0)
+			{
+				Queue<Cell> queue = new LinkedList<>();
+				queue.add(cell2);
+				while(!queue.isEmpty())
+				{
+				    int size = queue.size();
+				    while(size-- != 0)
+				    {
+				        Cell next = queue.poll();
+				        if(passed.contains(next))
+				        	throw new IllegalArgumentException("Cyclic relation found in greater-than constraint!");
+						passed.add(next);
+				        for(Entry<Cell, Cell> entry : constraints.getGreaterThans())
+				        	if(entry.getKey().equals(next))
+				        		queue.add(entry.getValue());
+				    }    
+				    chain++;
+				}
+				gtDownChainCache.put(cell2, chain);
+			}
+			if(value1 - chain < 0)
+				return false;
+			
+			//Get the largest group which must have unique numbers
+			int largest = gtDownGroupCache.getOrDefault(cell2, 0);
+			if(largest == 0)
+			{
+				largest = largestGroup(passed);
+				gtDownGroupCache.put(cell2, largest);
+			}
+			if(value1 - largest < 0)
+				return false;
+		}
+		if(value2 != NO_VALUE)
+		{
+			//Find longest upward chain starting from cell1
+			Set<Cell> passed = new HashSet<>();
+			int chain = gtUpChainCache.getOrDefault(cell2, 0);
+			if(chain == 0)
+			{
+				Queue<Cell> queue = new LinkedList<>();
+				queue.add(cell1);
+				while(!queue.isEmpty())
+				{
+				    int size = queue.size();
+				    while(size-- != 0)
+				    {
+				        Cell next = queue.poll();
+				        if(passed.contains(next))
+				        	throw new IllegalArgumentException("Cyclic relation found in greater-than constraint!");
+						passed.add(next);
+				        for(Entry<Cell, Cell> entry : constraints.getGreaterThans())
+				        {
+				        	if(entry.getValue().equals(next))
+				        		queue.add(entry.getKey());
+				        }
+				    }    
+				    chain++;
+				}
+				gtUpChainCache.put(cell2, chain);
+			}
+			if(value2 + chain > constraints.getBoardSize())
+				return false;
+			
+			//Get the largest group which must have unique numbers
+			int largest = gtUpGroupCache.getOrDefault(cell2, 0);
+			if(largest == 0)
+			{
+				largest = largestGroup(passed);
+				gtUpGroupCache.put(cell2, largest);
+			}
+			if(largest + value2 > constraints.getBoardSize())
+				return false;
+		}
 		return true;
+	}
+	
+	/**
+	 * Find the largest group (by row, column, or subsection) that the cells are part of
+	 */
+	private int largestGroup(Set<Cell> cells)
+	{
+		Map<Integer, AtomicInteger> rows = new HashMap<>();
+		Map<Integer, AtomicInteger> columns = new HashMap<>();
+		Map<Integer, AtomicInteger> subsections = new HashMap<>();
+		Map<List<Cell>, AtomicInteger> customRegions = new HashMap<>();
+		
+		for(Cell cell : cells)
+		{
+			rows.putIfAbsent(cell.getRow(), new AtomicInteger());
+			rows.get(cell.getRow()).incrementAndGet();
+			columns.putIfAbsent(cell.getColumn(), new AtomicInteger());
+			columns.get(cell.getColumn()).incrementAndGet();
+			if(constraints.isSubsections())
+			{
+				int index = cell.getRow() / constraints.getSubsecHeight() * constraints.getSubsecHeight()
+					+ cell.getColumn() / constraints.getSubsecWidth();
+				subsections.putIfAbsent(index, new AtomicInteger());
+				subsections.get(index).incrementAndGet();
+			}
+			if(constraints.getRegions() != null)
+				for(List<Cell> list : constraints.getRegions())
+					if(list.contains(cell))
+					{
+						customRegions.putIfAbsent(list, new AtomicInteger());
+						customRegions.get(list).incrementAndGet();
+					}
+		}
+		TreeSet<Integer> results = new TreeSet<>();
+		results.add(0);
+		rows.values().forEach(a -> results.add(a.get()));
+		columns.values().forEach(a -> results.add(a.get()));
+		subsections.values().forEach(a -> results.add(a.get()));
+		customRegions.values().forEach(a -> results.add(a.get()));
+		return results.last();
 	}
 	
 	private boolean killerConstraint(int[][] board, List<Cell> cells, int sum)
@@ -214,7 +345,10 @@ public class SudokuSolver
 				break;
 			
 			if(!passed[i])
-				theoreticalSum += i;
+			{
+				theoreticalSum += i + 1;
+				unknownsFilled++;
+			}
 		}
 		//Too high
 		if(curSum + theoreticalSum > sum)
@@ -228,7 +362,10 @@ public class SudokuSolver
 				break;
 			
 			if(!passed[i])
-				theoreticalSum += i;
+			{
+				theoreticalSum += i + 1;
+				unknownsFilled++;
+			}
 		}
 		//Too low
 		if(curSum + theoreticalSum < sum)
