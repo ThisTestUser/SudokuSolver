@@ -18,6 +18,14 @@ public class Main
 		//All of the problems are from the hardest difficulty in PuzzleMadness
 		//Most of the puzzles (that are from PuzzleMadness) are from the Sep 10 2022 archive
 		//The remaining ones are from the Sep 2022 archive, with one (9x9_greaterthan_2) being from an unknown date earlier than June 2019
+		
+		final int A = 10;
+		final int B = 11;
+		final int C = 12;
+		final int D = 13;
+		final int E = 14;
+		final int F = 15;
+		final int G = 16;
 	
 		//Initialize template problems
 		int[][] board;
@@ -440,6 +448,7 @@ public class Main
 		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 8), new Cell(8, 8)));
 		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(8, 1), new Cell(8, 2)));
 		constraints.setConsecutive(consecutive);
+		constraints.setNonConsecutive(true);
 		SUDOKU_PROBLEMS.put("9x9_consecutive", new SudokuProblem(board, constraints));
 		
 		board = new int[][]{
@@ -494,7 +503,152 @@ public class Main
 		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 7), new Cell(8, 7)));
 		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(8, 2), new Cell(8, 3)));
 		constraints.setConsecutive(consecutive);
+		constraints.setNonConsecutive(true);
 		SUDOKU_PROBLEMS.put("9x9_consecutive_2", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{9, 0, 0, 0, 0, 3, 4, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 1, 0, 8},
+	    	{0, 0, 0, 2, 0, 0, 0, 0, 9},
+	    	{7, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 4, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 8, 0, 0},
+	    	{0, 5, 0, 0, 0, 0, 0, 9, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 3, 0}
+		};
+		constraints = new SudokuConstraints(9, 3, 3);
+		List<Cell> evenCells = new ArrayList<>();
+		evenCells.add(new Cell(0, 0));
+		evenCells.add(new Cell(0, 1));
+		evenCells.add(new Cell(1, 1));
+		evenCells.add(new Cell(2, 2));
+		evenCells.add(new Cell(0, 3));
+		evenCells.add(new Cell(0, 5));
+		evenCells.add(new Cell(1, 3));
+		evenCells.add(new Cell(2, 4));
+		evenCells.add(new Cell(1, 6));
+		evenCells.add(new Cell(1, 7));
+		evenCells.add(new Cell(2, 7));
+		evenCells.add(new Cell(2, 8));
+		evenCells.add(new Cell(3, 1));
+		evenCells.add(new Cell(3, 2));
+		evenCells.add(new Cell(5, 0));
+		evenCells.add(new Cell(5, 2));
+		evenCells.add(new Cell(3, 3));
+		evenCells.add(new Cell(3, 5));
+		evenCells.add(new Cell(4, 4));
+		evenCells.add(new Cell(4, 5));
+		evenCells.add(new Cell(4, 6));
+		evenCells.add(new Cell(4, 7));
+		evenCells.add(new Cell(5, 7));
+		evenCells.add(new Cell(5, 8));
+		evenCells.add(new Cell(6, 0));
+		evenCells.add(new Cell(6, 2));
+		evenCells.add(new Cell(8, 0));
+		evenCells.add(new Cell(8, 1));
+		evenCells.add(new Cell(6, 5));
+		evenCells.add(new Cell(7, 3));
+		evenCells.add(new Cell(7, 4));
+		evenCells.add(new Cell(8, 4));
+		evenCells.add(new Cell(6, 6));
+		evenCells.add(new Cell(7, 6));
+		evenCells.add(new Cell(7, 8));
+		evenCells.add(new Cell(8, 8));
+		List<Cell> oddCells = new ArrayList<>();
+		for(int r =  0; r < 9; r++)
+			for(int c = 0; c < 9; c++)
+			{
+				if(!evenCells.contains(new Cell(r, c)))
+					oddCells.add(new Cell(r, c));
+			}
+		constraints.setEvenCells(evenCells);
+		constraints.setOddCells(oddCells);
+		SUDOKU_PROBLEMS.put("9x9_oddeven", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 6, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 3, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0}
+		};
+		constraints = new SudokuConstraints(9, 3, 3);
+		List<Entry<Cell, Cell>> sum5 = new ArrayList<>();
+		List<Entry<Cell, Cell>> sum10 = new ArrayList<>();
+		sum5.add(new AbstractMap.SimpleEntry<>(new Cell(0, 1), new Cell(0, 2)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(0, 6), new Cell(1, 6)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(0, 1), new Cell(1, 1)));
+		sum5.add(new AbstractMap.SimpleEntry<>(new Cell(1, 2), new Cell(2, 2)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(1, 5), new Cell(1, 6)));
+		sum5.add(new AbstractMap.SimpleEntry<>(new Cell(1, 7), new Cell(1, 8)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(2, 4), new Cell(3, 4)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(2, 7), new Cell(3, 7)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(3, 0), new Cell(4, 0)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(3, 2), new Cell(4, 2)));
+		sum5.add(new AbstractMap.SimpleEntry<>(new Cell(3, 7), new Cell(4, 7)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(4, 1), new Cell(5, 1)));
+		sum5.add(new AbstractMap.SimpleEntry<>(new Cell(4, 3), new Cell(4, 4)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(4, 4), new Cell(5, 4)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(4, 7), new Cell(4, 8)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(5, 5), new Cell(5, 6)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(5, 6), new Cell(6, 6)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(6, 0), new Cell(7, 0)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(6, 1), new Cell(7, 1)));
+		sum5.add(new AbstractMap.SimpleEntry<>(new Cell(6, 4), new Cell(6, 5)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(6, 6), new Cell(6, 7)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(7, 4), new Cell(8, 4)));
+		sum5.add(new AbstractMap.SimpleEntry<>(new Cell(7, 4), new Cell(7, 5)));
+		sum10.add(new AbstractMap.SimpleEntry<>(new Cell(8, 6), new Cell(8, 7)));
+		constraints.setSum5(sum5);
+		constraints.setSum10(sum10);
+		constraints.setNonSum5(true);
+		constraints.setNonSum10(true);
+		SUDOKU_PROBLEMS.put("9x9_xv", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
+			{0, B, 0, 0, 0, 0, 4, 0, 0, 9, 2, 0},
+			{0, 0, 0, 4, 0, 0, 0, 0, 1, 0, 0, 7},
+			{8, 0, 0, 0, B, 0, C, 0, 6, 0, 0, 0},
+			{2, C, 0, 0, 0, 0, 3, 0, A, 0, 0, 0},
+			{A, 1, 0, 0, 0, 0, 0, 6, 8, 0, 0, 4},
+			{0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 9, 0},
+			{0, 0, 0, 0, 7, B, 0, 0, 0, 0, 0, 1},
+			{0, 0, 0, 0, 0, 0, 6, 0, 4, 0, A, 0},
+			{0, 0, 0, 1, 4, 0, A, 0, 5, 0, 0, 0},
+			{0, 9, 0, 6, 0, 2, 0, 0, C, 8, 0, 0},
+			{3, 0, 0, 0, 0, 8, 7, 0, 0, 0, 5, 0},
+			{0, 5, 0, A, 1, C, 0, 0, B, 6, 0, 0}
+		};
+		constraints = new SudokuConstraints(12, 4, 3);
+		//Warning: This will take HOURS to finish
+		SUDOKU_PROBLEMS.put("12x12", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
+			{0, 5, 0, 0, 6, 0, F, 0, D, B, 0, 0, 0, C, G, 0},
+			{0, 2, 6, 0, 0, 0, 0, 9, 0, 0, 0, G, 0, E, 0, 0},
+			{0, 0, 8, 0, 0, 0, C, 2, 0, 0, 7, 6, 3, 0, B, 0},
+			{0, 1, 7, 0, 0, 0, 4, 3, 0, F, 0, 0, 0, 5, 0, 0},
+			{0, 8, 0, 0, 0, 0, 0, 0, 3, 0, 0, E, 0, 0, 2, 4},
+			{0, 0, 0, 0, 0, 0, 0, A, 0, C, D, 0, 0, 0, 0, B},
+			{0, G, 0, 3, 0, 0, 0, 0, 0, 2, 8, 5, C, 0, 0, E},
+			{0, E, 0, 0, 0, 9, 0, 0, 4, 0, 6, 0, 5, D, 0, 1},
+			{0, C, 3, 0, F, 0, 0, 0, 0, 0, 0, 0, 9, 0, 6, 7},
+			{0, 0, 0, 7, D, 0, A, 0, 6, 8, 2, 0, 0, 0, 3, 0},
+			{2, 0, 0, E, 0, B, 0, 7, G, 0, 3, 0, 0, 0, 0, 0},
+			{0, F, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, A},
+			{0, 0, 1, C, 0, 0, 9, 0, 0, 3, 0, 0, F, 0, 0, 0},
+			{G, 0, 5, 0, 1, C, 0, 0, B, 0, 0, 0, 4, 0, 0, 2},
+			{7, A, E, 0, 0, 8, 0, G, 0, 0, 5, 0, 0, 9, 0, 0},
+			{0, 0, 9, 0, 0, F, 0, 0, 0, 0, A, 1, 7, 0, 0, G}
+		};
+		constraints = new SudokuConstraints(16, 4, 4);
+		//Warning: Not viable currently
+		SUDOKU_PROBLEMS.put("16x16", new SudokuProblem(board, constraints));
 		
 		//Add your problem here
 	}
