@@ -14,6 +14,11 @@ public class Main
 
 	static
 	{
+		//Most of these problems are from PuzzleMadness, with the exception of 4x4_diag and 9x9_hardest
+		//All of the problems are from the hardest difficulty in PuzzleMadness
+		//Most of the puzzles (that are from PuzzleMadness) are from the Sep 10 2022 archive
+		//The remaining ones are from the Sep 2022 archive, with one (9x9_greaterthan_2) being from an unknown date earlier than June 2019
+	
 		//Initialize template problems
 		int[][] board;
 		SudokuConstraints constraints;
@@ -40,15 +45,15 @@ public class Main
 		SUDOKU_PROBLEMS.put("6x6", new SudokuProblem(board, constraints));
 		
 		board = new int[][]{
-			{0, 0, 0, 0, 0, 0, 2, 3, 0},
-			{2, 0, 0, 0, 0, 7, 0, 0, 0},
-			{0, 0, 0, 0, 4, 0, 0, 7, 9},
-			{0, 0, 9, 7, 8, 0, 0, 6, 2},
-			{0, 0, 0, 2, 0, 0, 0, 0, 3},
-			{0, 0, 4, 0, 0, 0, 5, 0, 0},
-			{0, 0, 0, 1, 0, 6, 0, 0, 7},
-			{0, 1, 0, 0, 7, 0, 0, 0, 0},
-			{9, 8, 0, 0, 0, 0, 0, 0, 4}
+			{0, 4, 0, 0, 0, 0, 0, 0, 3},
+			{8, 0, 0, 9, 0, 0, 2, 0, 4},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 7, 2, 0, 0, 8, 0, 3, 0},
+			{3, 8, 0, 6, 0, 0, 9, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 6, 0},
+			{0, 0, 0, 0, 7, 9, 0, 0, 0},
+			{0, 0, 6, 0, 5, 0, 1, 0, 0},
+			{2, 0, 0, 0, 3, 0, 0, 7, 0}
 		};
 		constraints = new SudokuConstraints(9, 3, 3);
 		SUDOKU_PROBLEMS.put("9x9", new SudokuProblem(board, constraints));
@@ -303,6 +308,7 @@ public class Main
 		greaterThans.add(new AbstractMap.SimpleEntry<>(new Cell(8, 6), new Cell(8, 7)));
 		greaterThans.add(new AbstractMap.SimpleEntry<>(new Cell(8, 8), new Cell(8, 7)));
 		constraints.setGreaterThans(greaterThans);
+		//This takes about 2.5 minutes to solve
 		SUDOKU_PROBLEMS.put("9x9_greaterthan_2", new SudokuProblem(board, constraints));
 		
 		board = new int[][]{
@@ -338,6 +344,41 @@ public class Main
 		SUDOKU_PROBLEMS.put("9x9_arrow", new SudokuProblem(board, constraints));
 		
 		board = new int[][]{
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 7, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 8, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 8, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0}
+		};
+		constraints = new SudokuConstraints(9, 3, 3);
+		arrows = new HashMap<>();
+		arrows.put(new Cell(0, 2), Arrays.asList(new Cell(1, 3), new Cell(2, 4)));
+		arrows.put(new Cell(1, 4), Arrays.asList(new Cell(0, 4), new Cell(0, 5)));
+		arrows.put(new Cell(1, 8), Arrays.asList(new Cell(1, 7), new Cell(0, 7)));
+		arrows.put(new Cell(2, 1), Arrays.asList(new Cell(2, 2), new Cell(1, 2)));
+		arrows.put(new Cell(2, 6), Arrays.asList(new Cell(2, 5), new Cell(1, 5)));
+		arrows.put(new Cell(3, 1), Arrays.asList(new Cell(3, 2), new Cell(2, 3)));
+		arrows.put(new Cell(3, 5), Arrays.asList(new Cell(4, 5), new Cell(3, 4)));
+		arrows.put(new Cell(4, 1), Arrays.asList(new Cell(3, 0), new Cell(2, 0), new Cell(1, 0)));
+		arrows.put(new Cell(4, 2), Arrays.asList(new Cell(5, 1), new Cell(5, 0)));
+		arrows.put(new Cell(4, 6), Arrays.asList(new Cell(5, 6), new Cell(4, 7), new Cell(3, 6)));
+		arrows.put(new Cell(5, 4), Arrays.asList(new Cell(4, 4), new Cell(4, 3), new Cell(5, 2), new Cell(6, 1)));
+		arrows.put(new Cell(5, 5), Arrays.asList(new Cell(6, 5), new Cell(7, 5)));
+		arrows.put(new Cell(5, 7), Arrays.asList(new Cell(4, 8), new Cell(3, 8)));
+		arrows.put(new Cell(6, 6), Arrays.asList(new Cell(7, 7), new Cell(7, 6)));
+		arrows.put(new Cell(7, 2), Arrays.asList(new Cell(7, 1), new Cell(6, 0)));
+		arrows.put(new Cell(7, 3), Arrays.asList(new Cell(7, 4), new Cell(8, 5)));
+		arrows.put(new Cell(8, 0), Arrays.asList(new Cell(7, 0), new Cell(8, 1)));
+		arrows.put(new Cell(8, 6), Arrays.asList(new Cell(8, 7), new Cell(8, 8)));
+		constraints.setArrows(arrows);
+		//This takes about a minute to solve
+		SUDOKU_PROBLEMS.put("9x9_arrow_2", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
 	    	{0, 0, 7, 0, 0, 3, 0, 8, 9},
 	    	{0, 0, 9, 0, 0, 5, 0, 0, 7},
 	    	{8, 0, 2, 0, 0, 0, 1, 0, 0},
@@ -351,6 +392,109 @@ public class Main
 		constraints = new SudokuConstraints(9, 3, 3);
 		constraints.setCenterDot(true);
 		SUDOKU_PROBLEMS.put("9x9_centerdot", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 9, 0, 0, 0, 0, 3, 0, 6},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 3, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 3, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 7, 0},
+	    	{0, 0, 9, 5, 0, 0, 0, 0, 0}
+		};
+		constraints = new SudokuConstraints(9, 3, 3);
+		List<Entry<Cell, Cell>> consecutive = new ArrayList<>();
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(0, 2), new Cell(1, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(0, 4), new Cell(1, 4)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(0, 5), new Cell(0, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(1, 1), new Cell(1, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(1, 7), new Cell(1, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 0), new Cell(3, 0)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 0), new Cell(2, 1)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 2), new Cell(3, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 3), new Cell(3, 3)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 7), new Cell(2, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 2), new Cell(4, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 3), new Cell(3, 4)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 5), new Cell(3, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 7), new Cell(4, 7)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 7), new Cell(3, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 8), new Cell(4, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(4, 1), new Cell(4, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(4, 4), new Cell(4, 5)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(4, 8), new Cell(5, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 1), new Cell(5, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 5), new Cell(6, 5)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 6), new Cell(6, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 0), new Cell(7, 0)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 1), new Cell(7, 1)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 2), new Cell(7, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 4), new Cell(6, 5)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 6), new Cell(6, 7)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 2), new Cell(7, 3)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 4), new Cell(7, 5)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 6), new Cell(8, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 7), new Cell(8, 7)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 8), new Cell(8, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(8, 1), new Cell(8, 2)));
+		constraints.setConsecutive(consecutive);
+		SUDOKU_PROBLEMS.put("9x9_consecutive", new SudokuProblem(board, constraints));
+		
+		board = new int[][]{
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 8, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 8, 0, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 2, 0, 0, 0, 0, 0, 0},
+	    	{0, 0, 0, 0, 0, 9, 0, 0, 0}
+		};
+		constraints = new SudokuConstraints(9, 3, 3);
+		consecutive = new ArrayList<>();
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(0, 0), new Cell(1, 0)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(0, 1), new Cell(1, 1)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(0, 2), new Cell(1, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(0, 2), new Cell(0, 3)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(0, 5), new Cell(0, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(1, 0), new Cell(2, 0)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(1, 4), new Cell(1, 5)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(1, 6), new Cell(2, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(1, 7), new Cell(2, 7)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 0), new Cell(2, 1)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 2), new Cell(2, 3)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 4), new Cell(3, 4)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(2, 8), new Cell(3, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 0), new Cell(4, 0)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 1), new Cell(4, 1)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 2), new Cell(4, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 6), new Cell(4, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(3, 7), new Cell(4, 7)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(4, 5), new Cell(4, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 0), new Cell(6, 0)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 1), new Cell(6, 1)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 1), new Cell(5, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 2), new Cell(6, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 5), new Cell(6, 5)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 6), new Cell(6, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 7), new Cell(5, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(5, 8), new Cell(6, 8)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 1), new Cell(7, 1)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 2), new Cell(6, 3)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 3), new Cell(7, 3)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(6, 5), new Cell(7, 5)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 2), new Cell(8, 2)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 2), new Cell(7, 3)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 3), new Cell(8, 3)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 5), new Cell(7, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 6), new Cell(8, 6)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(7, 7), new Cell(8, 7)));
+		consecutive.add(new AbstractMap.SimpleEntry<>(new Cell(8, 2), new Cell(8, 3)));
+		constraints.setConsecutive(consecutive);
+		SUDOKU_PROBLEMS.put("9x9_consecutive_2", new SudokuProblem(board, constraints));
 		
 		//Add your problem here
 	}
