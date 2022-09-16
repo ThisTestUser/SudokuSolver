@@ -23,10 +23,15 @@ public class SudokuProblem
 	
 	public void printBoard()
 	{
+		int spaces = (int)Math.log10(constraints.getBoardSize()) + 1;
 		for(int row = 0; row < constraints.getBoardSize(); row++)
 		{
 			for(int column = 0; column < constraints.getBoardSize(); column++)
-				System.out.print(board[row][column] + " ");
+			{
+				int value = board[row][column];
+				int valueLen = value <= 0 ? 0 : (int)Math.log10(value);
+				System.out.print(value + String.format("%" + (spaces - valueLen) + "s", " "));
+			}
 			System.out.println();
 		}
 	}

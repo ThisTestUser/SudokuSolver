@@ -2,7 +2,7 @@
 A solver for many types of Sudokus.
 
 ## How To Use
-After importing the code to your IDE, head over to Main.java to add your problem to ```SUDOKU_PROBLEMS```. You should create a new instance of ```SudokuProblem```, which consists of the board as a 2D array of integers, and an instance of ```SudokuConstraints```. That constructor accepts the Sudoku size and subsection dimensions. If there are any additional rules for the Sudoku, you will need to specify them also.
+After importing the code to your IDE, head over to Main.java to add your problem to ```SUDOKU_PROBLEMS```. You should create a new instance of ```SudokuProblem```, which is initialized with a board as a 2D array of integers, and an instance of ```SudokuConstraints```. That constructor accepts the Sudoku size and subsection dimensions. If there are any additional rules for the Sudoku, you will need to specify them also.
 
 Alternatively, add this program as a library to your own Java program and run ```Main.main()```, after you've added the problem to ```SUDOKU_PROBLEMS``` in your program.
 
@@ -20,8 +20,10 @@ Alternatively, add this program as a library to your own Java program and run ``
 
 * Can't tell the user if there are multiple solutions
 
-* Not the best algorithm - This program uses brute force to solve the Sudoku. This works well in normal Sudokus, but gets problematic when there are less than 10 clues in the Sudoku. In Killer Sudokus and Greater Than Sudokus, this might lead to the program taking hours to complete. Try to make sure at least 8 cells are filled in to minimize running time.
+* Not the best algorithm - This program uses brute force to solve the Sudoku. This doesn't affect most 9x9 Sudokus, which should all solve in a few minutes (it's an error if it doesn't). The only exception are Greater Than Sudokus with incomplete relations, which will not solve in a reasonable amount of time.
 
-For example, this Sudoku below (Greater Than) took 3 minutes to solve with 9 clues provided.
+Also, anything above 9x9 is currently not viable.
+
+For reference, this Sudoku below (Greater Than) took 2.5 minutes to solve with 9 clues provided.
 ![greaterthan](https://user-images.githubusercontent.com/15678918/60406990-b10f3e80-9b86-11e9-8b33-dd5d0a3260f2.png)
 
