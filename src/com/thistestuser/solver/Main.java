@@ -24,6 +24,12 @@ public class Main
 	
 	public static void main(String[] args)
 	{
+		if(args.length == 4 && args[0].equalsIgnoreCase("--constraints-file") && args[2].equalsIgnoreCase("--mode"))
+		{
+			ConstraintGenerator.generate(args[1], args[3]);
+			return;
+		}
+		
 		boolean displayAlpha = false;
 		if(args.length > 0 && args[args.length - 1].equalsIgnoreCase("--display-alpha"))
 		{

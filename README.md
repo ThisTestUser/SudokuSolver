@@ -2,7 +2,7 @@
 A solver for many types of Sudokus.
 
 ## How To Use
-After importing the code to your IDE, head over to Main.java to add your problem to ```SUDOKU_PROBLEMS```. You should create a new instance of ```SudokuProblem```, which is initialized with a board as a 2D array of integers, and an instance of ```SudokuConstraints```. That constructor accepts the Sudoku size and subsection dimensions. If there are any additional rules for the Sudoku, you will need to specify them also.
+After importing the code to your IDE, head over to Main.java to add your problem to ```SUDOKU_PROBLEMS```. You should create a new instance of ```SudokuProblem```, which is initialized with a board as a 2D array of integers, and an instance of ```SudokuConstraints```. That constructor accepts the Sudoku size and subsection dimensions. If there are any additional rules for the Sudoku, you will need to specify them also. Remember that in a 9x9 Sudoku, the cells range from 0-8.
 
 Then compile and run the solver from the command line, using ```--problem <problem_id>```, where the problem ID is a key in the ```SUDOKU_PROBLEMS``` map. The argument ```--displayalpha``` at the end is for converting numbers above 9 into letters.
 
@@ -18,7 +18,7 @@ Alternatively, add this program as a library to your own Java program and run ``
 * Deterministic - For any input, will always output the same solution, even if there are multiple solutions
 
 ## Downsides
-* Takes a long time to input custom rules
+* Takes a long time to input custom rules - The Sudoku solver supports printing out rule templates from a text file of space separated numbers. Check ConstraintGenerator.java for the formatting. The command line format is ```--constraints-file <file_name> --mode <mode>```.
 
 * Can't tell the user if there are multiple solutions
 

@@ -78,8 +78,8 @@ public class SudokuSolver
 				if((entry.getKey().equals(new Cell(row, column)) || entry.getValue().contains(new Cell(row, column)))
 					&& !arrowConstraint(board, entry.getValue(), entry.getKey()))
 					return false;
-		if(constraints.getConsecutive() != null)
-			for(Entry<Cell, Cell> entry : constraints.getConsecutive())
+		if(constraints.getConsecutives() != null)
+			for(Entry<Cell, Cell> entry : constraints.getConsecutives())
 				if((entry.getKey().equals(new Cell(row, column)) || entry.getValue().equals(new Cell(row, column)))
 					&& !consecutiveConstraint(board, entry.getKey(), entry.getValue()))
 					return false;
@@ -450,8 +450,8 @@ public class SudokuSolver
 		if(row < constraints.getBoardSize() - 1 && board[row + 1][column] != NO_VALUE && Math.abs(board[row + 1][column] - value) == 1)
 		{
 			boolean canCons = false;
-			if(constraints.getConsecutive() != null)
-				for(Entry<Cell, Cell> entry : constraints.getConsecutive())
+			if(constraints.getConsecutives() != null)
+				for(Entry<Cell, Cell> entry : constraints.getConsecutives())
 					if((entry.getKey().equals(new Cell(row, column)) || entry.getValue().equals(new Cell(row + 1, column)))
 						|| (entry.getKey().equals(new Cell(row + 1, column)) || entry.getValue().equals(new Cell(row, column))))
 					{
@@ -464,8 +464,8 @@ public class SudokuSolver
 		if(row > 0 && board[row - 1][column] != NO_VALUE && Math.abs(board[row - 1][column] - value) == 1)
 		{
 			boolean canCons = false;
-			if(constraints.getConsecutive() != null)
-				for(Entry<Cell, Cell> entry : constraints.getConsecutive())
+			if(constraints.getConsecutives() != null)
+				for(Entry<Cell, Cell> entry : constraints.getConsecutives())
 					if((entry.getKey().equals(new Cell(row, column)) || entry.getValue().equals(new Cell(row - 1, column)))
 						|| (entry.getKey().equals(new Cell(row - 1, column)) || entry.getValue().equals(new Cell(row, column))))
 					{
@@ -478,8 +478,8 @@ public class SudokuSolver
 		if(column < constraints.getBoardSize() - 1 && board[row][column + 1] != NO_VALUE && Math.abs(board[row][column + 1] - value) == 1)
 		{
 			boolean canCons = false;
-			if(constraints.getConsecutive() != null)
-				for(Entry<Cell, Cell> entry : constraints.getConsecutive())
+			if(constraints.getConsecutives() != null)
+				for(Entry<Cell, Cell> entry : constraints.getConsecutives())
 					if((entry.getKey().equals(new Cell(row, column)) || entry.getValue().equals(new Cell(row, column + 1)))
 						|| (entry.getKey().equals(new Cell(row, column + 1)) || entry.getValue().equals(new Cell(row, column))))
 					{
@@ -492,8 +492,8 @@ public class SudokuSolver
 		if(column > 0 && board[row][column - 1] != NO_VALUE && Math.abs(board[row][column - 1] - value) == 1)
 		{
 			boolean canCons = false;
-			if(constraints.getConsecutive() != null)
-				for(Entry<Cell, Cell> entry : constraints.getConsecutive())
+			if(constraints.getConsecutives() != null)
+				for(Entry<Cell, Cell> entry : constraints.getConsecutives())
 					if((entry.getKey().equals(new Cell(row, column)) || entry.getValue().equals(new Cell(row, column - 1)))
 						|| (entry.getKey().equals(new Cell(row, column - 1)) || entry.getValue().equals(new Cell(row, column))))
 					{

@@ -30,7 +30,7 @@ public class SudokuConstraints
 
 	/**
 	 * Is the sudoku non-consecutive (numbers next to each other can't be
-	 * consecutive) unless marked as consecutive in {@link #consecutive}?
+	 * consecutive) unless marked as consecutive in {@link #consecutives}?
 	 */
 	private boolean nonConsecutive = false;
 
@@ -71,7 +71,7 @@ public class SudokuConstraints
 	/**
 	 * Pairs of two cells that contain consecutive numbers.
 	 */
-	private List<Entry<Cell, Cell>> consecutive = new ArrayList<>();
+	private List<Entry<Cell, Cell>> consecutives = new ArrayList<>();
 
 	/**
 	 * These cells must be even.
@@ -213,14 +213,14 @@ public class SudokuConstraints
 		this.arrows = arrows;
 	}
 	
-	public List<Entry<Cell, Cell>> getConsecutive()
+	public List<Entry<Cell, Cell>> getConsecutives()
 	{
-		return consecutive;
+		return consecutives;
 	}
 	
-	public void setConsecutive(List<Entry<Cell, Cell>> consecutive)
+	public void setConsecutives(List<Entry<Cell, Cell>> consecutives)
 	{
-		this.consecutive = consecutive;
+		this.consecutives = consecutives;
 	}
 	
 	public List<Cell> getEvenCells()
