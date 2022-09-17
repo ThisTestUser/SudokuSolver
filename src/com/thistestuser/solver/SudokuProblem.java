@@ -21,32 +21,36 @@ public class SudokuProblem
 		return result;
 	}
 	
-	public void printBoard()
+	public void printBoard(boolean displayAlpha)
 	{
-		int spaces = (int)Math.log10(constraints.getBoardSize()) + 1;
-		for(int row = 0; row < constraints.getBoardSize(); row++)
-		{
-			for(int column = 0; column < constraints.getBoardSize(); column++)
-			{
-				int value = board[row][column];
-				int valueLen = value <= 0 ? 0 : (int)Math.log10(value);
-				System.out.print(value + String.format("%" + (spaces - valueLen) + "s", " "));
-			}
-			System.out.println();
-		}
+		printBoard(board, displayAlpha);
 	}
 	
-	public void printSolvedBoard()
+	public void printSolvedBoard(boolean displayAlpha)
 	{
 		if(solvedBoard == null)
 		{
 			System.out.println("Board was not solved!");
 			return;
 		}
+		printBoard(solvedBoard, displayAlpha);
+	}
+	
+	private void printBoard(int[][] board, boolean displayAlpha)
+	{
+		int spaces = (int)Math.log10(constraints.getBoardSize()) + 1;
+		if(displayAlpha && constraints.getBoardSize() < 36)
+			spaces = 1;
 		for(int row = 0; row < constraints.getBoardSize(); row++)
 		{
 			for(int column = 0; column < constraints.getBoardSize(); column++)
-				System.out.print(solvedBoard[row][column] + " ");
+			{
+				int value = board[row][column];
+				boolean isAlpha = displayAlpha && value > 9 && value < 36;
+				String printed = isAlpha ? String.valueOf((char)(value + 55)) : String.valueOf(value);
+				int valueLen = isAlpha || value <= 0 ? 0 : (int)Math.log10(value);
+				System.out.print(printed + String.format("%" + (spaces - valueLen) + "s", " "));
+			}
 			System.out.println();
 		}
 	}

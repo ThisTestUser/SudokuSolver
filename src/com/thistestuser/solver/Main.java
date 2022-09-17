@@ -1,5 +1,6 @@
 package com.thistestuser.solver;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,10 +24,16 @@ public class Main
 	
 	public static void main(String[] args)
 	{
+		boolean displayAlpha = false;
+		if(args.length > 0 && args[args.length - 1].equalsIgnoreCase("--display-alpha"))
+		{
+			displayAlpha = true;
+			args = Arrays.copyOfRange(args, 0, args.length - 1);
+		}
 		if(args.length == 1 && args[0].equalsIgnoreCase("--all"))
 		{
 			for(Entry<String, SudokuProblem> entry : SUDOKU_PROBLEMS.entrySet())
-				solveProblem(entry.getKey(), entry.getValue());
+				solveProblem(entry.getKey(), entry.getValue(), displayAlpha);
 			System.out.println("Done");
 			return;
 		}else if(args.length == 2 && args[0].equalsIgnoreCase("--problem"))
@@ -36,7 +43,7 @@ public class Main
 				System.out.println("Invalid problem specified");
 				return;
 			}
-			solveProblem(args[1], SUDOKU_PROBLEMS.get(args[1]));
+			solveProblem(args[1], SUDOKU_PROBLEMS.get(args[1]), displayAlpha);
 			System.out.println("Done");
 			return;
 		}
@@ -44,19 +51,20 @@ public class Main
 		System.out.println("Invalid argument. Below are the possible arguments:");
 		System.out.println("To solve a specific problem: --problem PROBLEM_NAME");
 		System.out.println("To solve all problems: --all");
+		System.out.println("Optional argument to use letters for numbers above 9: --display-alpha");
 	}
 	
-	private static void solveProblem(String name, SudokuProblem problem)
+	private static void solveProblem(String name, SudokuProblem problem, boolean displayAlpha)
 	{
 		System.out.println("Solving problem \"" + name + "\"...");
 		if(problem.solve())
 		{
 			System.out.println("Success:");
-			problem.printSolvedBoard();
+			problem.printSolvedBoard(displayAlpha);
 		}else
 		{
 			System.out.println("No solution was found. Original board:");
-			problem.printBoard();
+			problem.printBoard(displayAlpha);
 		}
 	}
 }
